@@ -233,6 +233,34 @@ h1 em {
 }
 .results.show { display: block; }
 .results h2 { margin: 0 0 5px; font-size: 1.5rem; }
+  
+.ai-answer {
+  margin: 18px 0 24px;
+  padding: 20px;
+  background: #f5f3eb;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.75;
+}
+.ai-answer:empty {
+  display: none;
+}
+#answer-status {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: .9rem;
+}
+.sources-heading {
+  margin: 24px 0 12px;
+  font-size: 1.1rem;
+}
+.search button:disabled {
+  opacity: .65;
+  cursor: wait;
+}
+
 .results-intro { margin: 0 0 18px; color: var(--muted); }
 .source-list {
   display: grid;
@@ -345,7 +373,7 @@ footer {
     <img src="https://cdn-icons-png.flaticon.com/512/12023/12023602.png"
          alt="Gato lector de Tomomi the Cat">
     <span>
-      <strong>caza curiosos.</strong>
+      <strong>Caza curiosos</strong>
       <small>Un lugar para preguntarlo todo</small>
     </span>
   </a>
@@ -417,19 +445,25 @@ footer {
   </section>
 
   <section class="results" id="results" aria-live="polite">
-    <h2>Tu búsqueda empieza aquí.</h2>
-    <p class="results-intro" id="results-intro"></p>
-    <div class="source-list" id="source-list"></div>
-    <div class="notice">
-      Esta versión te ayuda a buscar información en sitios externos; todavía
-      no genera respuestas con inteligencia artificial. Compará varias fuentes
-      y anotá quién publica la información.
-    </div>
-  </section>
+  <h2>La respuesta de Caza Curiosos</h2>
+  <p class="results-intro" id="results-intro"></p>
+
+  <div id="answer-status" role="status"></div>
+  <div id="ai-answer" class="ai-answer"></div>
+
+  <h3 class="sources-heading">¿Querés seguir investigando?</h3>
+  <div class="source-list" id="source-list"></div>
+
+  <div class="notice">
+    La inteligencia artificial puede equivocarse. Compará la respuesta
+    con fuentes confiables, comprobá quién publica la información y
+    consultá otras fuentes antes de dar un dato por seguro.
+  </div>
+</section>
 
   <section aria-labelledby="steps-title">
     <div class="section-head">
-      <h2 id="steps-title">Investigar también es aprender</h2>
+      <h2 id="steps-title">Investigar para aprender</h2>
     </div>
     <div class="steps">
       <div class="step">
@@ -452,7 +486,7 @@ footer {
 </main>
 
 <footer>
-  <span>caza curiosos. · Un proyecto para aprender investigando</span>
+  <span>Caza curiosos. · Un proyecto para aprender investigando</span>
   <span class="credit">
     Sticker:
     <a href="https://www.flaticon.com/free-sticker/reading_12023602"
@@ -462,11 +496,18 @@ footer {
 </div>
 
 <script>
+
 const form = document.getElementById('search-form');
 const input = document.getElementById('question');
 const results = document.getElementById('results');
 const intro = document.getElementById('results-intro');
 const sourceList = document.getElementById('source-list');
+const answer = document.getElementById('ai-answer');
+const status = document.getElementById('answer-status');
+const submitButton = form.querySelector('button');
+
+const WORKER_URL =
+  'https://caza-curiosos-ia.giacusakarina.workers.dev/';
 
 const sources = [
   {
@@ -501,30 +542,20 @@ const sources = [
   },
   {
     name: 'Buscar en la web',
-    description: 'Compará otros resultados y perspectivas',
+    description: 'Compará resultados y perspectivas',
     icon: '🔎',
     query: q => q
   }
 ];
 
-function searchQuestion(question) {
-  const q = question.trim();
-  if (!q) {
-    input.focus();
-    return;
-  }
-
-  intro.textContent =
-    'Tu pregunta: “' + q +
-    '”. Elegí una fuente para buscar información relacionada.';
-
+function showSources(question) {
   sourceList.replaceChildren();
 
   sources.forEach(source => {
     const link = document.createElement('a');
     link.className = 'source-link';
     link.href = 'https://www.google.com/search?q=' +
-      encodeURIComponent(source.query(q));
+      encodeURIComponent(source.query(question));
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
 
@@ -532,20 +563,76 @@ function searchQuestion(question) {
     icon.className = 'source-icon';
     icon.textContent = source.icon;
 
-    const textWrap = document.createElement('span');
+    const wrapper = document.createElement('span');
     const title = document.createElement('strong');
     title.textContent = source.name;
 
     const description = document.createElement('small');
     description.textContent = source.description;
 
-    textWrap.append(title, description);
-    link.append(icon, textWrap);
+    wrapper.append(title, description);
+    link.append(icon, wrapper);
     sourceList.append(link);
   });
+}
+
+async function searchQuestion(question) {
+  const q = question.trim();
+
+  if (!q) {
+    input.focus();
+    return;
+  }
+
+  if (q.length > 500) {
+    alert('Escribí una pregunta de hasta 500 caracteres.');
+    return;
+  }
 
   results.classList.add('show');
   results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  intro.textContent = 'Tu pregunta: “' + q + '”';
+  answer.textContent = '';
+  status.textContent = 'Estoy buscando una respuesta…';
+  showSources(q);
+
+  submitButton.disabled = true;
+  submitButton.textContent = 'Investigando…';
+
+  try {
+    const response = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ pregunta: q })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'No se pudo procesar la pregunta.');
+    }
+
+    if (!data.respuesta) {
+      throw new Error('La IA no devolvió una respuesta.');
+    }
+
+    answer.textContent = data.respuesta;
+    status.textContent = 'Respuesta generada por inteligencia artificial.';
+
+  } catch (error) {
+    console.error('Error al consultar Caza Curiosos:', error);
+
+    status.textContent =
+      'No pudimos obtener una respuesta de la IA. ' +
+      'Podés usar los enlaces de investigación que aparecen abajo.';
+
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Investigar ↗';
+  }
 }
 
 form.addEventListener('submit', event => {
@@ -559,6 +646,7 @@ document.querySelectorAll('[data-question]').forEach(button => {
     searchQuestion(input.value);
   });
 });
+
 </script>
 </body>
 </html>
