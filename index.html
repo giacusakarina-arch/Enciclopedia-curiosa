@@ -1,517 +1,564 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f8f4e9">
-  <meta name="description" content="Caza Curiosos: un espacio para hacer preguntas, descubrir respuestas y seguir investigando con fuentes confiables.">
-  <title>Caza Curiosos | Preguntar, descubrir, investigar</title>
-  <style>
-    :root {
-      --paper: #f8f4e9;
-      --paper-deep: #efe7d6;
-      --ink: #263a32;
-      --muted: #68766c;
-      --terra: #c96f50;
-      --terra-dark: #a94f35;
-      --green: #456b54;
-      --green-light: #e4ebdf;
-      --yellow: #f0d27a;
-      --line: #ded7c7;
-      --white: #fffdf8;
-      --shadow: 0 12px 30px rgba(49, 55, 42, .08);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8f5ee">
+<title>Caza Curiosos</title>
+<meta name="description" content="Un espacio para hacer preguntas, investigar y descubrir el mundo con fuentes confiables.">
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      line-height: 1.55;
-    }
-    button, input { font: inherit; }
-    a { color: inherit; }
-    .page-shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+<style>
+:root {
+  --ink: #263d35;
+  --muted: #64756d;
+  --paper: #fffdf8;
+  --bg: #f8f5ee;
+  --terra: #c86c4e;
+  --line: #e5dfd3;
+  --green: #e5ecdf;
+  --yellow: #f4dfad;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.55;
+}
+a { color: inherit; }
+.wrap {
+  width: min(1120px, calc(100% - 40px));
+  margin: auto;
+}
+header {
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.brand img {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+}
+.brand strong {
+  display: block;
+  font-size: 1.25rem;
+  letter-spacing: -.5px;
+}
+.brand small {
+  display: block;
+  color: var(--muted);
+  font-size: .73rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.header-note {
+  font-size: .85rem;
+  color: var(--muted);
+}
+.hero {
+  display: grid;
+  grid-template-columns: 1.08fr .92fr;
+  align-items: center;
+  gap: 28px;
+  padding: 62px 0 48px;
+  min-height: 470px;
+}
+.kicker {
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--terra);
+}
+h1 {
+  font-size: clamp(2.8rem, 5.5vw, 5.2rem);
+  line-height: .98;
+  letter-spacing: -3px;
+  margin: 16px 0 22px;
+  font-weight: 800;
+  max-width: 620px;
+}
+h1 em {
+  font-style: normal;
+  color: var(--terra);
+}
+.hero-copy {
+  max-width: 520px;
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin: 0 0 26px;
+}
+.search {
+  display: flex;
+  gap: 8px;
+  padding: 7px;
+  background: var(--paper);
+  border: 1px solid #d7d0c3;
+  border-radius: 14px;
+  max-width: 610px;
+}
+.search input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  padding: 12px 13px;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.search button {
+  border: 0;
+  background: var(--terra);
+  color: white;
+  border-radius: 10px;
+  padding: 0 20px;
+  font-size: .95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.search button:hover { background: #ae573e; }
+.microcopy {
+  font-size: .8rem;
+  color: var(--muted);
+  margin: 11px 0 0 3px;
+}
+.hero-art {
+  position: relative;
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.art-blob {
+  position: absolute;
+  width: min(350px, 90%);
+  aspect-ratio: 1;
+  background: #e7ebdf;
+  border-radius: 47% 53% 57% 43% / 48% 43% 57% 52%;
+  transform: rotate(-7deg);
+}
+.cat-sticker {
+  position: relative;
+  width: min(360px, 100%);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 8px #263d3510);
+}
+.art-caption {
+  position: absolute;
+  right: 0;
+  bottom: 8px;
+  background: var(--yellow);
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: .82rem;
+  font-weight: 700;
+  transform: rotate(3deg);
+}
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 26px 0 18px;
+}
+.section-head h2 {
+  font-size: 1.6rem;
+  letter-spacing: -.7px;
+  margin: 0;
+}
+.section-head p {
+  color: var(--muted);
+  font-size: .9rem;
+  margin: 0;
+}
+.topics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.topic {
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  padding: 21px 19px 19px;
+  min-height: 155px;
+  text-align: left;
+  background: var(--paper);
+  cursor: pointer;
+  color: var(--ink);
+  transition: transform .18s, box-shadow .18s;
+}
+.topic:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 34px #263d3510;
+}
+.topic-symbol {
+  font-size: 1.9rem;
+  display: block;
+  margin-bottom: 10px;
+}
+.topic strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+.topic small {
+  font-size: .82rem;
+  color: var(--muted);
+}
+.topic:nth-child(1) { background: #fbf0d6; }
+.topic:nth-child(2) { background: #e7efdf; }
+.topic:nth-child(3) { background: #e2eeee; }
+.topic:nth-child(4) { background: #eee6ef; }
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 22px 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 11px;
-      color: var(--ink);
-      text-decoration: none;
-      font-size: 1.15rem;
-      font-weight: 900;
-      letter-spacing: -.04em;
-    }
-    .brand-mark {
-      display: grid;
-      place-items: center;
-      width: 43px;
-      height: 43px;
-      border-radius: 14px 14px 14px 5px;
-      background: var(--terra);
-      color: white;
-      font-size: 1.45rem;
-      transform: rotate(-4deg);
-    }
-    .top-note {
-      color: var(--muted);
-      font-size: .85rem;
-      font-weight: 700;
-      text-align: right;
-    }
+.results {
+  display: none;
+  margin-top: 30px;
+  padding: 25px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+.results.show { display: block; }
+.results h2 { margin: 0 0 5px; font-size: 1.5rem; }
+.results-intro { margin: 0 0 18px; color: var(--muted); }
+.source-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.source-link {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  text-decoration: none;
+  background: #fff;
+}
+.source-link:hover { border-color: var(--terra); }
+.source-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: #f3efe7;
+  font-size: 1.3rem;
+}
+.source-link strong { display: block; }
+.source-link small {
+  display: block;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.notice {
+  margin-top: 15px;
+  padding: 13px 15px;
+  background: #f8f0dc;
+  border-radius: 10px;
+  color: #665632;
+  font-size: .85rem;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 42px 0 54px;
+}
+.step {
+  border-top: 2px solid #d4cabb;
+  padding: 17px 4px 0;
+}
+.step .num {
+  font-size: .75rem;
+  letter-spacing: 1px;
+  font-weight: 800;
+  color: var(--terra);
+}
+.step strong { display: block; margin: 6px 0; }
+.step p { margin: 0; color: var(--muted); font-size: .9rem; }
+footer {
+  border-top: 1px solid var(--line);
+  padding: 22px 0 28px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  color: var(--muted);
+  font-size: .8rem;
+}
+.credit a { color: var(--muted); }
 
-    .hero {
-      position: relative;
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(190px, .65fr);
-      align-items: center;
-      gap: 28px;
-      padding: 58px 0 42px;
-    }
-    .eyebrow {
-      display: inline-block;
-      margin-bottom: 14px;
-      padding: 6px 12px;
-      border: 1px solid #dfc7a8;
-      border-radius: 999px;
-      background: #fff8e9;
-      color: var(--terra-dark);
-      font-size: .78rem;
-      font-weight: 900;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-    h1 {
-      max-width: 720px;
-      margin: 0;
-      font-size: clamp(2.65rem, 6vw, 5.25rem);
-      line-height: .99;
-      letter-spacing: -.075em;
-    }
-    h1 span { color: var(--terra); }
-    .hero-copy {
-      max-width: 610px;
-      margin: 22px 0 0;
-      color: var(--muted);
-      font-size: clamp(1rem, 2vw, 1.13rem);
-    }
-    .hero-art {
-      position: relative;
-      display: grid;
-      place-items: center;
-      min-height: 240px;
-    }
-    .orbit {
-      position: absolute;
-      width: 220px;
-      height: 220px;
-      border: 2px dashed #d8cbb5;
-      border-radius: 50%;
-      transform: rotate(-18deg);
-    }
-    .cat-card {
-      position: relative;
-      display: grid;
-      place-items: center;
-      width: 160px;
-      height: 160px;
-      border: 2px solid var(--ink);
-      border-radius: 42% 58% 53% 47% / 47% 42% 58% 53%;
-      background: var(--yellow);
-      box-shadow: 7px 8px 0 var(--ink);
-      font-size: 5.6rem;
-      transform: rotate(5deg);
-    }
-    .spark {
-      position: absolute;
-      color: var(--terra);
-      font-size: 2rem;
-      font-weight: 900;
-    }
-    .spark.one { top: 22px; right: 22px; }
-    .spark.two { bottom: 25px; left: 18px; color: var(--green); }
-
-    .search-panel {
-      position: relative;
-      z-index: 1;
-      padding: 9px;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      background: var(--white);
-      box-shadow: var(--shadow);
-    }
-    .search {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .search input {
-      width: 100%;
-      min-width: 0;
-      padding: 17px 16px;
-      border: 0;
-      outline: none;
-      background: transparent;
-      color: var(--ink);
-      font-size: 1rem;
-    }
-    .search input::placeholder { color: #92978d; }
-    .search:focus-within { outline: 2px solid #d8a18b; border-radius: 13px; }
-    .search button {
-      flex: 0 0 auto;
-      padding: 15px 21px;
-      border: 0;
-      border-radius: 13px;
-      background: var(--terra);
-      color: white;
-      font-weight: 900;
-      cursor: pointer;
-      transition: background .2s, transform .2s;
-    }
-    .search button:hover { background: var(--terra-dark); transform: translateY(-1px); }
-    .search button:disabled { opacity: .65; cursor: wait; transform: none; }
-    .search-hint { margin: 10px 4px 0; color: var(--muted); font-size: .82rem; }
-
-    .topics { padding: 42px 0 58px; }
-    .section-kicker {
-      margin: 0 0 7px;
-      color: var(--terra-dark);
-      font-size: .78rem;
-      font-weight: 900;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-    }
-    .section-title {
-      margin: 0;
-      font-size: clamp(1.65rem, 3vw, 2.35rem);
-      letter-spacing: -.05em;
-    }
-    .section-intro { margin: 8px 0 22px; color: var(--muted); }
-    .topic-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-    }
-    .topic-card {
-      min-height: 155px;
-      padding: 19px;
-      border: 1px solid var(--line);
-      border-radius: 17px;
-      background: var(--white);
-      color: var(--ink);
-      text-align: left;
-      cursor: pointer;
-      transition: transform .2s, box-shadow .2s, border-color .2s;
-    }
-    .topic-card:hover { transform: translateY(-4px); border-color: #c7b59b; box-shadow: var(--shadow); }
-    .topic-icon { display: block; margin-bottom: 14px; font-size: 2rem; }
-    .topic-card strong { display: block; margin-bottom: 4px; font-size: 1.05rem; }
-    .topic-card span:last-child { display: block; color: var(--muted); font-size: .86rem; }
-
-    .results {
-      display: none;
-      margin: 0 0 65px;
-      padding: clamp(20px, 4vw, 34px);
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: var(--white);
-      box-shadow: var(--shadow);
-      scroll-margin-top: 20px;
-    }
-    .results.show { display: block; }
-    .results h2 { margin: 0; font-size: clamp(1.6rem, 3vw, 2.15rem); letter-spacing: -.05em; }
-    .results-intro { margin: 8px 0 0; color: var(--muted); overflow-wrap: anywhere; }
-    #answer-status { margin-top: 18px; color: var(--muted); font-size: .9rem; }
-    .ai-answer {
-      margin: 14px 0 24px;
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #f5f3eb;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      line-height: 1.75;
-    }
-    .ai-answer:empty { display: none; }
-    .sources-heading { margin: 25px 0 12px; font-size: 1.1rem; }
-    .source-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11px; }
-    .source-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 13px;
-      background: #fffefa;
-      text-decoration: none;
-      transition: border-color .2s, transform .2s;
-    }
-    .source-link:hover { border-color: var(--green); transform: translateY(-2px); }
-    .source-icon { display: grid; place-items: center; flex: 0 0 38px; width: 38px; height: 38px; border-radius: 11px; background: var(--green-light); font-size: 1.25rem; }
-    .source-link strong, .source-link small { display: block; }
-    .source-link strong { font-size: .92rem; }
-    .source-link small { margin-top: 3px; color: var(--muted); font-size: .75rem; line-height: 1.35; }
-    .notice { margin-top: 22px; padding: 14px 16px; border-left: 4px solid var(--yellow); border-radius: 0 10px 10px 0; background: #fff8e8; color: #5d604f; font-size: .86rem; }
-
-    footer { border-top: 1px solid var(--line); }
-    .footer-inner { display: flex; justify-content: space-between; gap: 15px; padding: 22px 0 28px; color: var(--muted); font-size: .82rem; }
-    .footer-inner strong { color: var(--ink); }
-
-    @media (max-width: 760px) {
-      .hero { grid-template-columns: 1fr; padding-top: 42px; gap: 10px; }
-      .hero-art { min-height: 190px; }
-      .orbit { width: 175px; height: 175px; }
-      .cat-card { width: 125px; height: 125px; font-size: 4.3rem; }
-      .topic-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .source-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 480px) {
-      .page-shell { width: min(100% - 28px, 1120px); }
-      .top-note { max-width: 145px; font-size: .74rem; }
-      .search { flex-direction: column; align-items: stretch; }
-      .search input { padding: 14px 12px; }
-      .search button { width: 100%; }
-      .topic-grid, .source-list { grid-template-columns: 1fr; }
-      .topic-card { min-height: auto; }
-      .footer-inner { flex-direction: column; }
-    }
-  </style>
+@media (max-width: 800px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: 44px;
+    gap: 0;
+  }
+  .hero-art { min-height: 290px; grid-row: 1; }
+  .cat-sticker { width: 270px; }
+  .art-blob { width: 270px; }
+  .art-caption { right: calc(50% - 150px); bottom: 5px; }
+  .hero-copy { font-size: 1rem; }
+  .topics { grid-template-columns: repeat(2, 1fr); }
+  .section-head { align-items: start; flex-direction: column; }
+  .header-note { display: none; }
+}
+@media (max-width: 520px) {
+  .wrap { width: calc(100% - 28px); }
+  header { min-height: 75px; }
+  .brand img { width: 46px; height: 46px; }
+  .brand strong { font-size: 1.1rem; }
+  .brand small { font-size: .62rem; }
+  .hero { padding: 28px 0 35px; }
+  .hero-art { min-height: 245px; }
+  .cat-sticker { width: 235px; }
+  .art-blob { width: 230px; }
+  h1 { font-size: 3.25rem; letter-spacing: -2px; }
+  .search { flex-direction: column; }
+  .search button { padding: 13px; }
+  .topics, .source-list, .steps { grid-template-columns: 1fr; }
+  .topic { min-height: auto; }
+  footer { flex-direction: column; }
+}
+</style>
 </head>
+
 <body>
-  <header class="page-shell topbar">
-    <a class="brand" href="#inicio" aria-label="Caza Curiosos, ir al inicio">
-      <span class="brand-mark" aria-hidden="true">?</span>
-      <span>Caza Curiosos</span>
-    </a>
-    <div class="top-note">Un lugar para preguntar<br>y descubrir algo nuevo.</div>
-  </header>
+<div class="wrap">
+<header>
+  <a class="brand" href="#inicio" aria-label="Caza Curiosos, inicio">
+    <img src="https://cdn-icons-png.flaticon.com/512/12023/12023602.png"
+         alt="Gato lector de Tomomi the Cat">
+    <span>
+      <strong>caza curiosos.</strong>
+      <small>Un lugar para preguntarlo todo</small>
+    </span>
+  </a>
+  <span class="header-note">Preguntar · Explorar · Descubrir</span>
+</header>
 
-  <main class="page-shell" id="inicio">
-    <section class="hero" aria-labelledby="main-title">
-      <div>
-        <span class="eyebrow">La curiosidad es el comienzo</span>
-        <h1 id="main-title">¿Qué querés <span>descubrir</span> hoy?</h1>
-        <p class="hero-copy">Hacé una pregunta, explorá una respuesta y seguí investigando. Cada descubrimiento puede llevarte a una nueva pregunta.</p>
-      </div>
-      <div class="hero-art" aria-hidden="true">
-        <div class="orbit"></div>
-        <span class="spark one">✳</span>
-        <span class="spark two">✦</span>
-        <div class="cat-card">🐱</div>
-      </div>
-    </section>
+<main id="inicio">
+  <section class="hero">
+    <div class="hero-content">
+      <div class="kicker">Tu curiosidad tiene lugar aquí</div>
+      <h1>El mundo está lleno de cosas por <em>descubrir.</em></h1>
+      <p class="hero-copy">
+        ¿Qué querés saber hoy? Empezá con una pregunta y encontrá pistas
+        para investigar en fuentes de información confiables.
+      </p>
 
-    <section aria-label="Buscar una respuesta">
-      <div class="search-panel">
-        <form class="search" id="search-form">
-          <input id="question" name="question" type="text" maxlength="500" placeholder="¿Por qué brillan las estrellas?" aria-label="Escribí tu pregunta" autocomplete="off" required>
-          <button type="submit">Investigar ↗</button>
-        </form>
-      </div>
-      <p class="search-hint">No hay preguntas demasiado pequeñas. Escribí lo que te da curiosidad.</p>
-    </section>
-
-    <section class="topics" aria-labelledby="topics-title">
-      <p class="section-kicker">¿Por dónde empezamos?</p>
-      <h2 class="section-title" id="topics-title">Elegí una pista</h2>
-      <p class="section-intro">Tocá un tema para empezar a investigar.</p>
-      <div class="topic-grid">
-        <button class="topic-card" type="button" data-question="¿Cómo se forman los planetas y las estrellas?">
-          <span class="topic-icon" aria-hidden="true">🪐</span>
-          <strong>Universo</strong>
-          <span>Planetas, estrellas y espacio</span>
-        </button>
-        <button class="topic-card" type="button" data-question="¿Cómo se comunican y se adaptan los animales?">
-          <span class="topic-icon" aria-hidden="true">🦊</span>
-          <strong>Animales</strong>
-          <span>Seres vivos y naturaleza</span>
-        </button>
-        <button class="topic-card" type="button" data-question="¿Cómo era la vida cotidiana en las civilizaciones antiguas?">
-          <span class="topic-icon" aria-hidden="true">🏺</span>
-          <strong>Historia</strong>
-          <span>Personas, culturas y pasado</span>
-        </button>
-        <button class="topic-card" type="button" data-question="¿Qué experimentos científicos sencillos explican fenómenos cotidianos?">
-          <span class="topic-icon" aria-hidden="true">🔬</span>
-          <strong>Ciencia</strong>
-          <span>Ideas, experimentos y preguntas</span>
-        </button>
-      </div>
-    </section>
-
-    <section class="results" id="results" aria-live="polite">
-      <h2>La respuesta de Caza Curiosos</h2>
-      <p class="results-intro" id="results-intro"></p>
-      <div id="answer-status" role="status"></div>
-      <div id="ai-answer" class="ai-answer"></div>
-      <h3 class="sources-heading">¿Querés seguir investigando?</h3>
-      <div class="source-list" id="source-list"></div>
-      <div class="notice">
-        La inteligencia artificial puede equivocarse. Compará la respuesta con fuentes confiables, comprobá quién publica la información y consultá otras fuentes antes de dar un dato por seguro.
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="page-shell footer-inner">
-      <span><strong>Caza Curiosos</strong> · Preguntar también es aprender.</span>
-      <span>Buscá, compará y seguí tu curiosidad.</span>
+      <form class="search" id="search-form">
+        <input id="question" type="search"
+          placeholder="¿Por qué brillan las estrellas?"
+          aria-label="Escribí tu pregunta" required>
+        <button type="submit">Investigar ↗</button>
+      </form>
+      <p class="microcopy">
+        No hay preguntas demasiado raras. La investigación empieza con una.
+      </p>
     </div>
-  </footer>
 
-  <script>
-    const form = document.getElementById('search-form');
-    const input = document.getElementById('question');
-    const results = document.getElementById('results');
-    const intro = document.getElementById('results-intro');
-    const sourceList = document.getElementById('source-list');
-    const answer = document.getElementById('ai-answer');
-    const status = document.getElementById('answer-status');
-    const submitButton = form.querySelector('button');
+    <div class="hero-art">
+      <div class="art-blob"></div>
+      <img class="cat-sticker"
+        src="https://cdn-icons-png.flaticon.com/512/12023/12023602.png"
+        alt="Gato leyendo un libro"
+        fetchpriority="high">
+      <span class="art-caption">Una pregunta puede llevarte muy lejos.</span>
+    </div>
+  </section>
 
-    const WORKER_URL = 'https://caza-curiosos-ia.giacusakarina.workers.dev/';
+  <section aria-labelledby="topics-title">
+    <div class="section-head">
+      <h2 id="topics-title">Elegí tu próxima aventura</h2>
+      <p>O escribí cualquier pregunta en el buscador.</p>
+    </div>
 
-    const sources = [
-      {
-        name: 'NASA',
-        description: 'Espacio, planetas y exploración',
-        icon: '🚀',
-        query: q => 'site:nasa.gov ' + q
-      },
-      {
-        name: 'UNESCO',
-        description: 'Cultura, educación y patrimonio',
-        icon: '🌍',
-        query: q => 'site:unesco.org ' + q
-      },
-      {
-        name: 'Smithsonian',
-        description: 'Historia, ciencia, arte y naturaleza',
-        icon: '🏛️',
-        query: q => 'site:si.edu ' + q
-      },
-      {
-        name: 'National Geographic',
-        description: 'Animales, geografía y medioambiente',
-        icon: '🌿',
-        query: q => 'site:nationalgeographic.com ' + q
-      },
-      {
-        name: 'Britannica',
-        description: 'Enciclopedia y conocimiento general',
-        icon: '📚',
-        query: q => 'site:britannica.com ' + q
-      },
-      {
-        name: 'Buscar en la web',
-        description: 'Compará resultados y perspectivas',
-        icon: '🔎',
-        query: q => q
-      }
-    ];
+    <div class="topics">
+      <button class="topic" data-question="¿Cómo se formó el universo?">
+        <span class="topic-symbol">✦</span>
+        <strong>Universo y espacio</strong>
+        <small>Planetas, estrellas y galaxias</small>
+      </button>
 
-    function showSources(question) {
-      sourceList.replaceChildren();
+      <button class="topic" data-question="¿Qué animales tienen habilidades sorprendentes?">
+        <span class="topic-symbol">❋</span>
+        <strong>Animales y naturaleza</strong>
+        <small>Seres vivos y sus hábitats</small>
+      </button>
 
-      sources.forEach(source => {
-        const link = document.createElement('a');
-        link.className = 'source-link';
-        link.href = 'https://www.google.com/search?q=' + encodeURIComponent(source.query(question));
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
+      <button class="topic" data-question="¿Cómo vivían las personas en la Antigüedad?">
+        <span class="topic-symbol">⌂</span>
+        <strong>Historia y culturas</strong>
+        <small>Personas, lugares y costumbres</small>
+      </button>
 
-        const icon = document.createElement('span');
-        icon.className = 'source-icon';
-        icon.textContent = source.icon;
+      <button class="topic" data-question="¿Cómo funcionan los inventos que usamos todos los días?">
+        <span class="topic-symbol">✳</span>
+        <strong>Ciencia e inventos</strong>
+        <small>Ideas para entender el mundo</small>
+      </button>
+    </div>
+  </section>
 
-        const wrapper = document.createElement('span');
-        const title = document.createElement('strong');
-        title.textContent = source.name;
+  <section class="results" id="results" aria-live="polite">
+    <h2>Tu búsqueda empieza aquí.</h2>
+    <p class="results-intro" id="results-intro"></p>
+    <div class="source-list" id="source-list"></div>
+    <div class="notice">
+      Esta versión te ayuda a buscar información en sitios externos; todavía
+      no genera respuestas con inteligencia artificial. Compará varias fuentes
+      y anotá quién publica la información.
+    </div>
+  </section>
 
-        const description = document.createElement('small');
-        description.textContent = source.description;
+  <section aria-labelledby="steps-title">
+    <div class="section-head">
+      <h2 id="steps-title">Investigar también es aprender</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="num">PASO 01</span>
+        <strong>Hacé una pregunta</strong>
+        <p>Elegí algo que quieras comprender, descubrir o comprobar.</p>
+      </div>
+      <div class="step">
+        <span class="num">PASO 02</span>
+        <strong>Buscá y compará</strong>
+        <p>Consultá más de una fuente y fijate quién la publica.</p>
+      </div>
+      <div class="step">
+        <span class="num">PASO 03</span>
+        <strong>Compartí lo aprendido</strong>
+        <p>Explicalo con tus palabras y registrá de dónde sacaste los datos.</p>
+      </div>
+    </div>
+  </section>
+</main>
 
-        wrapper.append(title, description);
-        link.append(icon, wrapper);
-        sourceList.append(link);
-      });
-    }
+<footer>
+  <span>caza curiosos. · Un proyecto para aprender investigando</span>
+  <span class="credit">
+    Sticker:
+    <a href="https://www.flaticon.com/free-sticker/reading_12023602"
+       target="_blank" rel="noopener noreferrer">Tomomi the Cat / Flaticon</a>
+  </span>
+</footer>
+</div>
 
-    async function searchQuestion(question) {
-      const q = question.trim();
+<script>
+const form = document.getElementById('search-form');
+const input = document.getElementById('question');
+const results = document.getElementById('results');
+const intro = document.getElementById('results-intro');
+const sourceList = document.getElementById('source-list');
 
-      if (!q) {
-        input.focus();
-        return;
-      }
+const sources = [
+  {
+    name: 'NASA',
+    description: 'Espacio, planetas y exploración',
+    icon: '🚀',
+    query: q => 'site:nasa.gov ' + q
+  },
+  {
+    name: 'UNESCO',
+    description: 'Cultura, educación y patrimonio',
+    icon: '🌍',
+    query: q => 'site:unesco.org ' + q
+  },
+  {
+    name: 'Smithsonian',
+    description: 'Historia, ciencia, arte y naturaleza',
+    icon: '🏛️',
+    query: q => 'site:si.edu ' + q
+  },
+  {
+    name: 'National Geographic',
+    description: 'Animales, geografía y medioambiente',
+    icon: '🌿',
+    query: q => 'site:nationalgeographic.com ' + q
+  },
+  {
+    name: 'Britannica',
+    description: 'Enciclopedia y conocimiento general',
+    icon: '📚',
+    query: q => 'site:britannica.com ' + q
+  },
+  {
+    name: 'Buscar en la web',
+    description: 'Compará otros resultados y perspectivas',
+    icon: '🔎',
+    query: q => q
+  }
+];
 
-      if (q.length > 500) {
-        alert('Escribí una pregunta de hasta 500 caracteres.');
-        return;
-      }
+function searchQuestion(question) {
+  const q = question.trim();
+  if (!q) {
+    input.focus();
+    return;
+  }
 
-      results.classList.add('show');
-      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  intro.textContent =
+    'Tu pregunta: “' + q +
+    '”. Elegí una fuente para buscar información relacionada.';
 
-      intro.textContent = 'Tu pregunta: “' + q + '”';
-      answer.textContent = '';
-      status.textContent = 'Estoy buscando una respuesta…';
-      showSources(q);
+  sourceList.replaceChildren();
 
-      submitButton.disabled = true;
-      submitButton.textContent = 'Investigando…';
+  sources.forEach(source => {
+    const link = document.createElement('a');
+    link.className = 'source-link';
+    link.href = 'https://www.google.com/search?q=' +
+      encodeURIComponent(source.query(q));
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
 
-      try {
-        const response = await fetch(WORKER_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pregunta: q })
-        });
+    const icon = document.createElement('span');
+    icon.className = 'source-icon';
+    icon.textContent = source.icon;
 
-        const data = await response.json();
+    const textWrap = document.createElement('span');
+    const title = document.createElement('strong');
+    title.textContent = source.name;
 
-        if (!response.ok) {
-          throw new Error(data.error || 'No se pudo procesar la pregunta.');
-        }
-        if (!data.respuesta) {
-          throw new Error('La IA no devolvió una respuesta.');
-        }
+    const description = document.createElement('small');
+    description.textContent = source.description;
 
-        answer.textContent = data.respuesta;
-        status.textContent = 'Respuesta generada por inteligencia artificial.';
-      } catch (error) {
-        console.error('Error al consultar Caza Curiosos:', error);
-        status.textContent = 'No pudimos obtener una respuesta de la IA. Podés usar los enlaces de investigación que aparecen abajo.';
-      } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Investigar ↗';
-      }
-    }
+    textWrap.append(title, description);
+    link.append(icon, textWrap);
+    sourceList.append(link);
+  });
 
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      searchQuestion(input.value);
-    });
+  results.classList.add('show');
+  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
-    document.querySelectorAll('[data-question]').forEach(button => {
-      button.addEventListener('click', () => {
-        input.value = button.dataset.question;
-        searchQuestion(input.value);
-      });
-    });
-  </script>
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  searchQuestion(input.value);
+});
+
+document.querySelectorAll('[data-question]').forEach(button => {
+  button.addEventListener('click', () => {
+    input.value = button.dataset.question;
+    searchQuestion(input.value);
+  });
+});
+</script>
 </body>
 </html>
