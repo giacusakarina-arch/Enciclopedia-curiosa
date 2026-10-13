@@ -1,0 +1,377 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f9fc">
+  <meta name="description" content="Una enciclopedia infantil para investigar preguntas curiosas y descubrir información confiable.">
+  <title>Curiosa | Una enciclopedia para descubrir</title>
+  <style>
+    :root {
+      --ink: #253d68;
+      --blue: #2879dc;
+      --paper: #f7f9fc;
+      --muted: #65748b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .page {
+      width: min(1080px, 100%);
+      margin: auto;
+      padding: 22px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: #ffcf52;
+      font-size: 27px;
+    }
+
+    .subtitle {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: normal;
+    }
+
+    .header-note {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: 20px;
+      padding: clamp(24px, 5vw, 48px);
+      border-radius: 30px;
+      background: #dff3f0;
+      overflow: hidden;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 13px;
+      border-radius: 20px;
+      background: white;
+      color: #28796f;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    h1 {
+      max-width: 470px;
+      margin: 18px 0 12px;
+      font-size: clamp(34px, 5vw, 54px);
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+    }
+
+    .intro {
+      max-width: 430px;
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    .illustration {
+      display: grid;
+      place-items: center;
+      min-height: 240px;
+      font-size: clamp(80px, 15vw, 150px);
+      text-align: center;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 25px;
+      padding: 8px;
+      border: 2px solid #e5eaf1;
+      border-radius: 18px;
+      background: white;
+      box-shadow: 0 5px 15px #253d6810;
+    }
+
+    .search-box:focus-within {
+      border-color: var(--blue);
+    }
+
+    .search-icon {
+      padding-left: 8px;
+      font-size: 23px;
+    }
+
+    input {
+      width: 100%;
+      min-width: 0;
+      padding: 13px 4px;
+      border: 0;
+      outline: 0;
+      color: var(--ink);
+      background: transparent;
+      font-size: 16px;
+    }
+
+    .primary {
+      padding: 14px 20px;
+      border: 0;
+      border-radius: 13px;
+      background: var(--blue);
+      color: white;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .primary:hover { background: #185fb7; }
+    button:focus-visible, a:focus-visible, input:focus-visible {
+      outline: 3px solid #ffbd35;
+      outline-offset: 3px;
+    }
+
+    .examples {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      font-size: 13px;
+    }
+
+    .examples button {
+      padding: 8px 11px;
+      border: 1px solid #c8dfdc;
+      border-radius: 18px;
+      background: #f7fffd;
+      color: var(--ink);
+    }
+
+    .examples button:hover { background: white; }
+
+    .section-title {
+      margin: 32px 0 16px;
+      font-size: 23px;
+    }
+
+    .topics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .topic {
+      min-height: 135px;
+      padding: 19px;
+      border: 0;
+      border-radius: 21px;
+      text-align: left;
+      color: var(--ink);
+      transition: transform .15s;
+    }
+
+    .topic:hover { transform: translateY(-3px); }
+    .topic span { display: block; font-size: 36px; margin-bottom: 13px; }
+    .topic strong { font-size: 15px; }
+    .t1 { background: #ffebc2; }
+    .t2 { background: #dcefd9; }
+    .t3 { background: #f8dfe8; }
+    .t4 { background: #e4e2ff; }
+
+    .answer {
+      display: none;
+      margin-top: 28px;
+      padding: clamp(20px, 4vw, 35px);
+      border: 1px solid #e1e7ef;
+      border-radius: 24px;
+      background: white;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .answer h2 { line-height: 1.25; }
+    .answer h3 { margin-top: 25px; }
+    .answer a { color: #185fb7; }
+    .answer p { white-space: pre-wrap; }
+    .status { color: var(--muted); font-size: 14px; }
+
+    .note {
+      margin-top: 28px;
+      padding: 18px;
+      border-radius: 17px;
+      background: #fff4d8;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    footer {
+      padding: 30px 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      .page { padding: 14px; }
+      .header-note { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 24px; }
+      .illustration { min-height: 120px; }
+      .topics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .topic { min-height: 120px; padding: 15px; }
+      .search-box { flex-wrap: wrap; }
+      .search-box .primary { width: 100%; }
+      .examples { line-height: 1.7; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">📚</div>
+        <div>
+          Curiosa
+          <div class="subtitle">Una enciclopedia para descubrir</div>
+        </div>
+      </div>
+      <div class="header-note">Preguntar es el comienzo de investigar ✨</div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <span class="eyebrow">🌟 TU ESPACIO PARA EXPLORAR</span>
+          <h1>¡La curiosidad no tiene límites!</h1>
+          <p class="intro">
+            ¿Qué te gustaría descubrir hoy? Escribí tu pregunta y comenzá
+            una aventura para encontrar información.
+          </p>
+
+          <form id="searchForm" class="search-box">
+            <span class="search-icon" aria-hidden="true">🔎</span>
+            <input id="question" type="search" maxlength="500"
+              placeholder="¿Por qué brillan las estrellas?"
+              aria-label="Escribí tu pregunta" required>
+            <button class="primary" type="submit">Investigar</button>
+          </form>
+
+          <div class="examples">
+            <span>Podés preguntar:</span>
+            <button type="button" data-question="¿Por qué los pulpos tienen tres corazones?">🐙 Los pulpos</button>
+            <button type="button" data-question="¿Cómo se forman los volcanes?">🌋 Los volcanes</button>
+            <button type="button" data-question="¿Quién construyó las pirámides de Egipto?">🏺 Las pirámides</button>
+          </div>
+        </div>
+        <div class="illustration" aria-hidden="true">🌎 🔭 📖</div>
+      </section>
+
+      <h2 class="section-title">¿Por dónde querés empezar?</h2>
+      <section class="topics" aria-label="Temas para explorar">
+        <button class="topic t1" data-topic="Espacio y universo">
+          <span>🪐</span><strong>Espacio y universo</strong>
+        </button>
+        <button class="topic t2" data-topic="Naturaleza y animales">
+          <span>🦊</span><strong>Naturaleza y animales</strong>
+        </button>
+        <button class="topic t3" data-topic="Historia y culturas">
+          <span>🏛️</span><strong>Historia y culturas</strong>
+        </button>
+        <button class="topic t4" data-topic="Arte e inventos">
+          <span>🎨</span><strong>Arte e inventos</strong>
+        </button>
+      </section>
+
+      <section id="answer" class="answer" aria-live="polite">
+        <h2 id="answerTitle">Tu investigación</h2>
+        <p id="status" class="status"></p>
+        <div id="answerBody"></div>
+      </section>
+
+      <div class="note">
+        💡 <strong>Un consejo para investigadores:</strong>
+        compará la información, fijate quién la publica y consultá los enlaces
+        de las fuentes. Una respuesta puede ayudarte a empezar, pero siempre
+        es importante comprobar lo que descubrís.
+      </div>
+    </main>
+
+    <footer>Curiosa · Un espacio para preguntar, investigar y descubrir.</footer>
+  </div>
+
+  <script>
+    const form = document.getElementById("searchForm");
+    const question = document.getElementById("question");
+    const answer = document.getElementById("answer");
+    const answerTitle = document.getElementById("answerTitle");
+    const status = document.getElementById("status");
+    const answerBody = document.getElementById("answerBody");
+
+    function beginSearch(text) {
+      question.value = text;
+      answer.style.display = "block";
+      answerTitle.textContent = "¡Vamos a investigar!";
+      status.textContent = "La búsqueda con inteligencia artificial todavía no está conectada.";
+      answerBody.replaceChildren();
+
+      const p = document.createElement("p");
+      p.textContent =
+        "Esta es la base visual de Curiosa. En el siguiente paso vamos a conectar " +
+        "un servicio de búsqueda para obtener información real, respuestas claras " +
+        "y enlaces a fuentes confiables. Todavía no se está consultando internet.";
+      answerBody.appendChild(p);
+
+      answer.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+      const text = question.value.trim();
+      if (text) beginSearch(text);
+    });
+
+    document.querySelectorAll("[data-question]").forEach(button => {
+      button.addEventListener("click", () => beginSearch(button.dataset.question));
+    });
+
+    document.querySelectorAll("[data-topic]").forEach(button => {
+      button.addEventListener("click", () => {
+        question.value = "Quiero investigar sobre " + button.dataset.topic.toLowerCase() + ". ¿Qué curiosidades puedo descubrir?";
+        question.focus();
+        question.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
+  </script>
+</body>
+</html>
