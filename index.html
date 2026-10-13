@@ -416,17 +416,22 @@ footer {
       </button>
     </div>
   </section>
+<section class="results" id="results" aria-live="polite">
+  <h2>La respuesta de Caza Curiosos</h2>
+  <p class="results-intro" id="results-intro"></p>
 
-  <section class="results" id="results" aria-live="polite">
-    <h2>Tu búsqueda empieza aquí.</h2>
-    <p class="results-intro" id="results-intro"></p>
-    <div class="source-list" id="source-list"></div>
-    <div class="notice">
-      Esta versión te ayuda a buscar información en sitios externos; todavía
-      no genera respuestas con inteligencia artificial. Compará varias fuentes
-      y anotá quién publica la información.
-    </div>
-  </section>
+  <div id="answer-status" role="status"></div>
+  <div id="ai-answer" class="ai-answer"></div>
+
+  <h3 class="sources-heading">¿Querés seguir investigando?</h3>
+  <div class="source-list" id="source-list"></div>
+
+  <div class="notice">
+    La inteligencia artificial puede equivocarse. Compará la respuesta
+    con fuentes confiables, comprobá quién publica la información y
+    consultá otras fuentes antes de dar un dato por seguro.
+  </div>
+</section>
 
   <section aria-labelledby="steps-title">
     <div class="section-head">
