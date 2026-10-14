@@ -673,8 +673,10 @@ async function searchImages(question) {
     );
 
     if (images.length === 0) {
-      return;
-    }
+  section.hidden = false;
+  gallery.innerHTML = '<p>No encontré imágenes para esta pregunta. Probá con otras palabras.</p>';
+  return;
+}
 
     images.forEach(page => {
       const info = page.imageinfo[0];
