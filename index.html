@@ -635,7 +635,101 @@ function showSources(question) {
     sourceList.append(link);
   });
 }
+async function searchImages(question) {
+  const section = document.getElementById('images-section');
+  const gallery = document.getElementById('image-gallery');
 
+  section.hidden = true;
+  gallery.replaceChildren();
+
+  const params = new URLSearchParams({
+    action: 'query',
+    generator: 'search',
+    gsrsearch: question + ' filetype:bitmap',
+    gsrnamespace: '6',
+    gsrlimit: '6',
+    prop: 'imageinfo',
+    iiprop: 'url|extmetadata',
+    iiurlwidth: '500',
+    format: 'json',
+    origin: '*'
+  });
+
+  try {
+    const response = await fetch(
+      'https://commons.wikimedia.org/w/api.php?' + params.toString()
+    );
+
+    if (!response.ok) {
+      throw new Error('No se pudieron buscar imágenes.');
+    }
+
+    const data = await response.json();
+
+    const pages = Object.values(data.query?.pages || {});
+
+    const images = pages.filter(page =>
+      page.imageinfo?.[0]?.thumburl
+    );
+
+    if (images.length === 0) {
+      return;
+    }
+
+    images.forEach(page => {
+      const info = page.imageinfo[0];
+      const metadata = info.extmetadata || {};
+
+      const card = document.createElement('article');
+      card.className = 'image-card';
+
+      const img = document.createElement('img');
+      img.src = info.thumburl;
+      img.alt = page.title.replace(/^File:/, '').replace(/_/g, ' ');
+      img.loading = 'lazy';
+
+      img.addEventListener('error', () => {
+        card.remove();
+
+        if (!gallery.querySelector('.image-card')) {
+          section.hidden = true;
+        }
+      });
+
+      const caption = document.createElement('div');
+      caption.className = 'image-caption';
+
+      const title = document.createElement('a');
+      title.href = info.descriptionurl;
+      title.target = '_blank';
+      title.rel = 'noopener noreferrer';
+      title.textContent = page.title
+        .replace(/^File:/, '')
+        .replace(/_/g, ' ');
+
+      const author = document.createElement('p');
+      author.textContent = metadata.Artist?.value
+        ? 'Autor: ' + metadata.Artist.value.replace(/<[^>]*>/g, '')
+        : 'Consultá la autoría en la fuente original.';
+
+      const license = document.createElement('p');
+      license.textContent = metadata.LicenseShortName?.value
+        ? 'Licencia: ' + metadata.LicenseShortName.value
+        : 'Consultá la licencia en la fuente original.';
+
+      caption.append(title, author, license);
+      card.append(img, caption);
+      gallery.append(card);
+    });
+
+    if (gallery.querySelector('.image-card')) {
+      section.hidden = false;
+    }
+
+  } catch (error) {
+    console.error('Error al buscar imágenes:', error);
+  }
+}
 async function searchQuestion(question) {
   const q = question.trim();
 
@@ -679,8 +773,10 @@ async function searchQuestion(question) {
       throw new Error('La IA no devolvió una respuesta.');
     }
 
-    answer.textContent = data.respuesta;
+   answer.textContent = data.respuesta;
     status.textContent = 'Respuesta generada por inteligencia artificial.';
+
+    await searchImages(q);
 
   } catch (error) {
     console.error('Error al consultar Caza Curiosos:', error);
