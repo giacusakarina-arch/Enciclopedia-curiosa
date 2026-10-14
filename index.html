@@ -669,7 +669,7 @@ const searchTerms = question
     gsrnamespace: '6',
     gsrlimit: '12',
     prop: 'imageinfo',
-    iiprop: 'url|extmetadata',
+    iiprop: 'url|extmetadata|mime',
     iiurlwidth: '700',
     format: 'json',
     origin: '*'
@@ -688,9 +688,15 @@ const searchTerms = question
 
     const pages = Object.values(data.query?.pages || {});
 
-    const images = pages.filter(page =>
-      page.imageinfo?.[0]?.thumburl
-    );
+    const images = pages.filter(page => {
+  const info = page.imageinfo?.[0];
+
+  return (
+    info?.thumburl &&
+    info?.mime?.startsWith('image/') &&
+    !info.mime.includes('svg')
+  );
+});
 
     if (images.length === 0) {
   section.hidden = false;
