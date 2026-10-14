@@ -665,7 +665,7 @@ const searchTerms = question
   const params = new URLSearchParams({
     action: 'query',
     generator: 'search',
-    gsrsearch: searchTerms || question,
+    gsrsearch: (searchTerms || question) + ' -filetype:pdf',
     gsrnamespace: '6',
     gsrlimit: '12',
     prop: 'imageinfo',
@@ -688,14 +688,25 @@ const searchTerms = question
 
     const pages = Object.values(data.query?.pages || {});
 
-    const images = pages.filter(page => {
+  const images = pages.filter(page => {
   const info = page.imageinfo?.[0];
 
-  return (
-    info?.thumburl &&
-    info?.mime?.startsWith('image/') &&
-    !info.mime.includes('svg')
-  );
+  if (!info?.thumburl) return false;
+
+  const title = page.title.toLowerCase();
+  const mime = (info.mime || '').toLowerCase();
+
+  // Solo formatos de imagen apropiados para la galería.
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(mime)) {
+    return false;
+  }
+
+  // Excluir documentos y páginas escaneadas identificables por su título.
+  if (/\.(pdf|djvu|tif|tiff)$/i.test(title)) {
+    return false;
+  }
+
+  return true;
 });
 
     if (images.length === 0) {
