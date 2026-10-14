@@ -638,7 +638,24 @@ function showSources(question) {
 async function searchImages(question) {
   const section = document.getElementById('images-section');
   const gallery = document.getElementById('image-gallery');
+const stopWords = new Set([
+  'como', 'porque', 'por', 'que', 'los', 'las',
+  'una', 'uno', 'unos', 'unas', 'del', 'con',
+  'para', 'sobre', 'entre', 'donde', 'cuando',
+  'tienen', 'tiene', 'hacen', 'hace', 'pueden',
+  'puede', 'son', 'ser', 'sus', 'ellos', 'ellas',
+  'este', 'esta', 'esto', 'hay', 'viven', 'vive'
+]);
 
+const searchTerms = question
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/[¿?¡!.,;:]/g, ' ')
+  .split(/\s+/)
+  .filter(word => word.length > 2 && !stopWords.has(word))
+  .slice(0, 6)
+  .join(' ');
   section.hidden = false;
   gallery.innerHTML = '<p>Estoy buscando imágenes...</p>';
 
@@ -648,12 +665,12 @@ async function searchImages(question) {
   const params = new URLSearchParams({
     action: 'query',
     generator: 'search',
-    gsrsearch: question.replace(/[¿?¡!.,]/g, '').split(' ').slice(0, 4).join(' '),
+    gsrsearch: searchTerms || question,
     gsrnamespace: '6',
-    gsrlimit: '6',
+    gsrlimit: '12',
     prop: 'imageinfo',
     iiprop: 'url|extmetadata',
-    iiurlwidth: '500',
+    iiurlwidth: '700',
     format: 'json',
     origin: '*'
   });
