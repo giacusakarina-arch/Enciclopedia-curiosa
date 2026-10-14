@@ -639,6 +639,9 @@ async function searchImages(question) {
   const section = document.getElementById('images-section');
   const gallery = document.getElementById('image-gallery');
 
+  section.hidden = false;
+  gallery.innerHTML = '<p>Estoy buscando imágenes...</p>';
+
   section.hidden = true;
   gallery.replaceChildren();
 
