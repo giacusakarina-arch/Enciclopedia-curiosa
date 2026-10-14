@@ -648,7 +648,7 @@ async function searchImages(question) {
   const params = new URLSearchParams({
     action: 'query',
     generator: 'search',
-    gsrsearch: question + ' filetype:bitmap',
+    gsrsearch: question.replace(/[¿?¡!.,]/g, '').split(' ').slice(0, 4).join(' '),
     gsrnamespace: '6',
     gsrlimit: '6',
     prop: 'imageinfo',
